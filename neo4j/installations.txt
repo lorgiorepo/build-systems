@@ -5,7 +5,26 @@ echo 'deb http://debian.neo4j.org/repo stable/' > /etc/apt/sources.list.d/neo4j.
 aptitude update -y # Find out about the files in our repository
 aptitude install neo4j -y # Install Neo4j, community edition
             
-You could replace stable with testing if you want a newer (but unsupported) build of Neo4j. If you'd like a different edition, you can run:
-apt-get install neo4j-advanced, or
+#You could replace stable with testing if you want a newer (but unsupported) build of Neo4j. If you'd like a different edition, you can run:
+apt-get install neo4j-advanced #, or
 apt-get install neo4j-enterprise
-When you install neo4j-enterprise you will also get neo4j-arbiter.
+#When you install neo4j-enterprise you will also get neo4j-arbiter.
+
+
+#Verify installations
+service neo4j-service status
+
+#Allow external connections
+#Edit /etc/neo4j/neo4j-server.properties and uncomment the following line:
+org.neo4j.server.webserver.address=0.0.0.0
+service neo4j-service restart
+
+# Solving this warning
+# WARNING: Max 1024 open files allowed, minimum of 40 000 recommended.
+# 1. Edit /etc/security/limits.conf and add these two lines:
+root   soft     nofile  40000
+root   hard    nofile  40000
+# 2. Edit /etc/pam.d/su and uncomment or add the following line:
+session    required   pam_limits.so
+# 3. Restart server
+shutdown -r now
