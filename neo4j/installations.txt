@@ -28,3 +28,6 @@ root   hard    nofile  40000
 session    required   pam_limits.so
 # 3. Restart server
 shutdown -r now
+
+# View neo4j web console
+http://127.0.0.1:7474/browser/
