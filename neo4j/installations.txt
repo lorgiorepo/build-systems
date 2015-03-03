@@ -1,0 +1,11 @@
+## INSTALLATION ON DEBIAN SYSTEMS
+
+wget -O - http://debian.neo4j.org/neotechnology.gpg.key| apt-key add - # Import our signing key
+echo 'deb http://debian.neo4j.org/repo stable/' > /etc/apt/sources.list.d/neo4j.list # Create an Apt sources.list file
+aptitude update -y # Find out about the files in our repository
+aptitude install neo4j -y # Install Neo4j, community edition
+            
+You could replace stable with testing if you want a newer (but unsupported) build of Neo4j. If you'd like a different edition, you can run:
+apt-get install neo4j-advanced, or
+apt-get install neo4j-enterprise
+When you install neo4j-enterprise you will also get neo4j-arbiter.
