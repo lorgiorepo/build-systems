@@ -1,0 +1,28 @@
+#asadmin --port 15123 change-admin-password
+
+#asadmin
+asadmin> get secure-admin.enabled
+secure-admin.enabled=false
+Command get executed successfully.
+
+asadmin> enable-secure-admin
+You must restart all running servers for the change in secure admin to take effect.
+Command enable-secure-admin executed successfully.
+
+asadmin> stop-domain
+Waiting for the domain to stop ….
+Command stop-domain executed successfully.
+
+asadmin> start-domain
+Waiting for domain1 to start ……
+Successfully started the domain : domain1
+domain Location: /u01/app/glassfish3/glassfish/domains/domain1
+Log File: /u01/app/glassfish3/glassfish/domains/domain1/logs/server.log
+Admin Port: 4848
+Command start-domain executed successfully.
+
+asadmin> get secure-admin.enabled
+secure-admin.enabled=true
+Command get executed successfully.
+
+
