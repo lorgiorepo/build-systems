@@ -1,0 +1,42 @@
+### se toma como supesto que han sido copiados los archivos necesarios a la carpeta /u01/install
+### MySQL-server-advanced-5.5.25a-1.el6.x86_64.rpm
+### MySQL-devel-advanced-5.5.25a-1.el6.x86_64.rpm
+### MySQL-client-advanced-5.5.25a-1.el6.x86_64.rpm
+### MySQL-shared-advanced-5.5.25a-1.el6.x86_64.rpm
+### MySQL-shared-compat-advanced-5.5.25a-1.el6.x86_64.rpm
+
+cd /u01/install
+
+rpm -e --nodeps mysql-libs
+rpm -i MySQL-server-advanced-5.5.25a-1.el6.x86_64.rpm
+rpm -i MySQL-devel-advanced-5.5.25a-1.el6.x86_64.rpm
+rpm -i MySQL-client-advanced-5.5.25a-1.el6.x86_64.rpm
+rpm -i MySQL-shared-advanced-5.5.25a-1.el6.x86_64.rpm
+rpm -i MySQL-shared-compat-advanced-5.5.25a-1.el6.x86_64.rpm
+
+### Habilitar el inicio con el SO de MySql
+
+chkconfig --level 35 mysql on
+
+### Iniciar el servicio
+
+service mysql start
+
+### Establecer el password del usuario root
+
+mysqladmin -u root password 'Clave2015'
+
+### Probar la instalación con el cliente de consola
+
+mysql -u root -p mysql
+
+### Otorgar permisos de conexión al usuario root
+
+grant all on *.* to 'root'@'%' identified by 'Clave2015';
+exit
+
+### Cambiar la configuración de MySql
+
+cp /usr/share/mysql/my-large.cnf /etc/my.cnf
+
+service mysql restart
