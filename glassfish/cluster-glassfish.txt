@@ -1,0 +1,15 @@
+nano /root/gf.file
+AS_ADMIN_PASSWORD=@dmin@dmin2013
+AS_ADMIN_JMSDBPASSWORD=glassfish
+
+---------------------------
+
+asadmin create-cluster RomaCluster
+asadmin --user admin --passwordfile /root/gf.file
+set --port 4848 --user admin --passwordfile /root/gf.file RomaCluster.jms-service.type=EMBEDDED
+configure-jms-cluster --clustertype=conventional --messagestoretype=jdbc --configstoretype=shareddb --dbvendor postgressql --dbuser glassfishha --dburl jdbc:postgresql://192.168.1.193:5432/glassfishha RomaCluster
+asadmin create-local-instance --cluster RomaCluster nodo1
+asadmin create-local-instance --cluster RomaCluster nodo2
+
+
+mq://localhost:27677/,mq://localhost:27676/
