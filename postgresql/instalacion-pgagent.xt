@@ -1,0 +1,9 @@
+1. Instalar el pgadmin III
+#yum install pgadmin3
+
+2. Ejecutar el script pgagent.sql
+
+3. Crear los servicios de inicio y detencion de pgagent
+
+startPGAgent
+stopPGAgent

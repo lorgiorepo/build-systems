@@ -1,0 +1,5 @@
+#!/bin/bash
+PID=$(pgrep -f "pgagent $1")
+echo "pgagent schedule service stopped on ports!"
+kill -9 $PID
+

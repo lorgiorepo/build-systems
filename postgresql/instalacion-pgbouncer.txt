@@ -1,0 +1,68 @@
+#yum update
+
+-- descargar version pgbouncer-1.5
+
+#./configure --prefix=/usr/local/ --with-libevent=libevent-prefix
+
+#make
+/bin/sh: git: command not found
+     -->      doc
+make[1]: No se hace nada para `all'.
+     <--      doc
+     CC       src/admin.c
+     CC       src/client.c
+     CC       src/dnslookup.c
+     CC       src/janitor.c
+     CC       src/loader.c
+     CC       src/main.c
+     CC       src/objects.c
+     CC       src/pktbuf.c
+     CC       src/pooler.c
+     CC       src/proto.c
+     CC       src/sbuf.c
+     CC       src/server.c
+     CC       src/stats.c
+     CC       src/system.c
+     CC       src/takeover.c
+     CC       src/util.c
+     CC       src/varcache.c
+     CC       lib/usual/aatree.c
+     CC       lib/usual/base.c
+     CC       lib/usual/cfparser.c
+     CC       lib/usual/err.c
+     CC       lib/usual/event.c
+     CC       lib/usual/fileutil.c
+     CC       lib/usual/getopt.c
+     CC       lib/usual/list.c
+     CC       lib/usual/logging.c
+     CC       lib/usual/lookup3.c
+     CC       lib/usual/mbuf.c
+     CC       lib/usual/md5.c
+     CC       lib/usual/netdb.c
+     CC       lib/usual/pgutil.c
+     CC       lib/usual/regex.c
+     CC       lib/usual/safeio.c
+     CC       lib/usual/signal.c
+     CC       lib/usual/slab.c
+     CC       lib/usual/socket.c
+     CC       lib/usual/socket_ntop.c
+     CC       lib/usual/socket_pton.c
+     CC       lib/usual/string.c
+     CC       lib/usual/strpool.c
+     CC       lib/usual/time.c
+     CC       lib/usual/cbtree.c
+     CC       lib/usual/cxalloc.c
+     CC       lib/usual/heap.c
+     CC       lib/usual/mempool.c
+     CCLD     pgbouncer
+#make install
+/bin/sh: git: command not found
+     -->      doc
+     INSTALL  pgbouncer.1 /usr/local/share/man/man1
+     INSTALL  pgbouncer.5 /usr/local/share/man/man5
+     <--      doc
+     INSTALL  pgbouncer /usr/local/bin
+     INSTALL  README /usr/local/share/doc/pgbouncer
+     INSTALL  NEWS /usr/local/share/doc/pgbouncer
+     INSTALL  etc/pgbouncer.ini /usr/local/share/doc/pgbouncer
+     INSTALL  etc/userlist.txt /usr/local/share/doc/pgbouncer

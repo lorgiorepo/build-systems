@@ -1,0 +1,109 @@
+Configuración de repositorios yum
+---------------------------------
+
+$ wget http://yum.pgrpms.org/reporpms/9.0/pgdg-centos-9.0-2.noarch.rpm
+$ rpm -i pgdg-centos-9.0-2.noarch.rpm
+$ nano /etc/yum.repos.d/CentOS-Base.repo
+
+Buscamos las secciones "[base]" y "[update]", las cuales le agregamos la siguiente línea que excluye cualquier otra versión de los repositorios oficiales:
+
+exclude=postgresql*
+exclude=geos*
+
+$ yum clean all
+$ yum update
+
+Instalación de PostgreSQL 9.0 + PostGIS 1.5.2
+---------------------------------------------
+
+$ yum install -y postgresql90 postgresql90-server postgresql90-contrib
+$ yum install -y geos proj postgis90.x86_64
+$ yum install -y gcc
+$ yum install -y postgresql-contrib
+
+$ yum install -y php-devel php-pear
+
+Configuración de PostgreSQL
+---------------------------
+
+$ service postgresql-9.0 initdb
+$ nano /var/lib/pgsql/9.0/data/postgresql.conf 
+  
+  listen_addresses = '*'
+  port = 5432
+  max_connections = 500
+  constraint_exclusion = on 
+
+  ######## AGREGAR TUNNING y CONFIGURCAION LOG #############
+
+Configuración de Acceso a PostgreSQL
+------------------------------------
+
+$ nano /var/lib/pgsql/9.0/data/pg_hba.conf
+
+  # TYPE  DATABASE        USER            CIDR-ADDRESS            METHOD
+
+  # "local" is for Unix domain socket connections only
+  local   all             all                                     password
+  # IPv4 local connections:
+  host    all             all             127.0.0.1/32            password
+  host    all             all             190.0.0.0/8             password
+  host    all             all             200.0.0.0/8             password
+  host    all             all             192.0.0.0/8             password
+  # IPv6 local connections:
+  host    all             all             ::1/128                 ident
+
+$ service postgresql-9.0 restart
+
+Configuración del Servicio postgresql-9.0
+-----------------------------------------
+
+$ service postgresql-9.0 start
+$ chkconfig --level 35 postgresql-9.0 on
+
+Inicialización de la Base de datos postgres
+-------------------------------------------
+
+$ su – postgres
+$ psql -d template1 -U postgres
+ # ALTER user postgres with password '123456';
+ # create language plpgsql ;
+ # \q
+$ exit
+
+Configuración de Base de Datos GPS7000 con soporte GIS
+------------------------------------------------------
+
+$ cd /u01
+$ mkdir data
+$ mkdir -p /u01/data/{gps_data,gps_data_geocode,gps_data_status,gps_data_track,gps_indexes,gps_index_geocode,gps_index_status,gps_index_track,gps_geom,gps_reporte_vgeocerca}
+$ chown -R postgres.postgres /u01/data
+$ chmod -R 775 /u01/data
+$ su – postgres
+$ psql
+ # CREATE ROLE gps7000 WITH LOGIN PASSWORD 'gps7000' SUPERUSER INHERIT CREATEDB CREATEROLE;
+ # CREATE TABLESPACE gps_data OWNER gps7000 LOCATION '/u01/data/gps_data';
+ # CREATE TABLESPACE gps_data_geocode OWNER gps7000 LOCATION '/u01/data/gps_data_geocode';
+ # CREATE TABLESPACE gps_data_status OWNER gps7000 LOCATION '/u01/data/gps_data_status';
+ # CREATE TABLESPACE gps_data_track OWNER gps7000 LOCATION '/u01/data/gps_data_track';
+ # CREATE TABLESPACE gps_index_geocode OWNER gps7000 LOCATION '/u01/data/gps_index_geocode';
+ # CREATE TABLESPACE gps_index_status OWNER gps7000 LOCATION '/u01/data/gps_index_status';
+ # CREATE TABLESPACE gps_index_track OWNER gps7000 LOCATION '/u01/data/gps_index_track';
+ # CREATE TABLESPACE gps_indexes OWNER gps7000 LOCATION '/u01/data/gps_indexes';
+ # CREATE TABLESPACE gps_geom OWNER gps7000 LOCATION '/u01/data/gps_geom';
+ # CREATE TABLESPACE gps_reporte_vgeocerca OWNER gps7000 LOCATION '/u01/data/gps_reporte_vgeocerca';
+ # CREATE DATABASE gps7000 WITH OWNER = gps7000 ENCODING = 'UTF8' TABLESPACE = gps_data CONNECTION LIMIT = -1;
+ # \q
+$ psql -d gps7000 -f /usr/pgsql-9.0/share/contrib/postgis-1.5/postgis.sql
+$ psql -d gps7000 -f /usr/pgsql-9.0/share/contrib/postgis-1.5/spatial_ref_sys.sql
+$ psql -U gps7000 -W -d gps7000 
+ # select postgis_full_version();
+  postgis_full_version
+  ——————————————————————————————————–
+  POSTGIS=”1.5.2? GEOS=”3.2.2-CAPI-1.6.2? PROJ=”Rel. 4.7.1, 23 September 2009? LIBXML=”2.6.26? USE_STATS
+ (1 row)
+ 
+ $ psql -U gps7000
+  # INSERT into spatial_ref_sys (srid, auth_name, auth_srid, proj4text, srtext) values ( 96722, 'sr-org', 6722, '+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=6378137 +b=6378137 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs ', 'PROJCS["Popular Visualisation CRS / Mercator",GEOGCS["Popular Visualisation CRS",DATUM["Popular_Visualisation_Datum",SPHEROID["Popular Visualisation Sphere",6378137,0,AUTHORITY["EPSG","7059"]],TOWGS84[0,0,0,0,0,0,0],AUTHORITY["EPSG","6055"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.01745329251994328,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4055"]],UNIT["metre",1,AUTHORITY["EPSG","9001"]],PROJECTION["Mercator_1SP"],PARAMETER["central_meridian",0],PARAMETER["scale_factor",1],PARAMETER["false_easting",0],PARAMETER["false_northing",0],AUTHORITY["EPSG","3785"],AXIS["X",EAST],AXIS["Y",NORTH]]');
+  
+ ###### Instalación de PGAgent ######

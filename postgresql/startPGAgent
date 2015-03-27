@@ -1,0 +1,6 @@
+#!/bin/bash
+echo "Init pgagent schedule service..."
+pgagent -s /u01/platform/logs/pgagent.log hostaddr=192.168.1.170 port=5432 dbname=postgres user=postgres password=123456
+PID=$(pgrep -f "pgagent $1")
+echo "pgagent schedule service on port: $PID running!"
+
