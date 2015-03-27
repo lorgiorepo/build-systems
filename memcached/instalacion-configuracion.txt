@@ -1,0 +1,15 @@
+#Tener previamente las siguinte liberias
+libevent-devel-1.4.13-4.el6.x86_64.rpm
+libevent-doc-1.4.13-4.el6.noarch.rpm
+libevent-headers-1.4.13-4.el6.noarch.rpm
+memcached-1.4.4-3.el6.x86_64.rpm
+
+yum install gcc libevent
+yum install rpm-build
+
+echo "%_topdir /home/root/rpmbuild" >> ~/.rpmmacros
+mkdir -p /home/root/rpmbuild/{SPECS,BUILD,SRPMS,RPMS,SOURCES}
+
+rpm -U libevent-*.rpm
+
+rpm -i memcached-1.4.4-3.el6.x86_64.rpm
