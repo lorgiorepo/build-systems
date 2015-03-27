@@ -1,0 +1,100 @@
+### depende de la instalaci�n de java
+
+### se toma como supesto que ha sido copiado el archivo necesario a la carpeta /u01/install
+### ehcache-2.5.2-distribution.tar.gz
+
+cd /u01/install/
+
+tar -xvf ehcache-2.5.2-distribution.tar.gz
+
+mv ehcache-2.5.2 /u01/
+
+### crear servicio de linux
+
+cd /etc/rc.d/init.d
+
+nano terracotta
+
+---------------------->
+
+#Script to start/stop/restart/version Terracotta
+#chkconfig: 35 20 80
+#description: Terracotta Daemon
+case "$1" in
+start)
+echo "Starting Terracota..."
+export JAVA_HOME=/u01/java/jdk1.6.0_32
+nohup /u01/ehcache-2.5.2/terracotta/bin/start-tc-server.sh > /dev/null &
+/u01/ehcache-2.5.2/terracotta/bin/version.sh
+;;
+stop)
+echo "Stoping Terracotta..."
+export JAVA_HOME=/u01/java/jdk1.6.0_32
+nohup /u01/ehcache-2.5.2/terracotta/bin/stop-tc-server.sh > /dev/null &
+;;
+restart)
+export JAVA_HOME=/u01/java/jdk1.6.0_32
+echo "Stoping Terracotta..." 
+nohup /u01/ehcache-2.5.2/terracotta/bin/stop-tc-server.sh > /dev/null &
+
+echo "Starting Terracotta..."
+nohup /u01/ehcache-2.5.2/terracotta/bin/start-tc-server.sh > /dev/null &
+/u01/ehcache-2.5.2/terracotta/bin/version.sh
+;;
+version)
+/u01/ehcache-2.5.2/terracotta/bin/version.sh
+;;
+*)
+echo $"Usage: $0 {start|stop|restart|version}"
+exit 1
+esac
+
+
+---------------------->
+
+### probar el servicio
+
+chmod +x terracotta
+
+chconfig --add terracotta
+
+chconfig terracotta on
+
+service terracotta start
+
+
+==============================================================================================================
+
+
+#Script to start/stop/restart/version Terracotta
+#chkconfig: 35 20 80
+#description: Terracotta Daemon
+case "$1" in
+start)
+echo "Starting Terracota..."
+export JAVA_HOME=/u01/java/jdk1.6.0_32
+nohup /u01/ehcache-2.5.2/terracotta/bin/start-tc-server.sh > /dev/null &
+/u01/ehcache-2.5.2/terracotta/bin/version.sh
+;;
+stop)
+echo "Stoping Terracotta..."
+export JAVA_HOME=/u01/java/jdk1.6.0_32
+nohup /u01/ehcache-2.5.2/terracotta/bin/stop-tc-server.sh > /dev/null &
+;;
+restart)
+export JAVA_HOME=/u01/java/jdk1.6.0_32
+echo "Stoping Terracotta..." 
+nohup /u01/ehcache-2.5.2/terracotta/bin/stop-tc-server.sh > /dev/null &
+
+echo "Starting Terracotta..."
+nohup /u01/ehcache-2.5.2/terracotta/bin/start-tc-server.sh > /dev/null &
+/u01/ehcache-2.5.2/terracotta/bin/version.sh
+;;
+version)
+/u01/ehcache-2.5.2/terracotta/bin/version.sh
+;;
+*)
+echo $"Usage: $0 {start|stop|restart|version}"
+exit 1
+esac
+
