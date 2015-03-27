@@ -1,0 +1,80 @@
+nano /etc/hosts
+
+200.29.1.170	Forli-170
+200.29.1.171	Forli_171
+200.29.1.172	Forli-172
+
+wget http://dlc.sun.com.edgesuite.net/glassfish/v3/release/glassfish-v3-unix.sh
+
+./glassfish-v3-unix.sh -v -a v3-file-gps -s
+
+asadmin start-domain domain1
+
+asadmin create-jms-resource --user admin --restype javax.jms.ConnectionFactory jms/GPSServiceConnectionFactory
+asadmin create-jms-resource --user admin --restype javax.jms.Queue jms/GPSServiceQueue
+
+Envio de correos
+
+asadmin create-jms-resource --user admin --restype javax.jms.ConnectionFactory jms/EmailQueueFactory
+asadmin create-jms-resource --user admin --restype javax.jms.Queue jms/EmailQueue
+
+asadmin
+  change-admin-password
+  enable-secure-admin
+
+netstat -tlp --numeric-ports | grep 4848
+
+usuario:  admin
+clave  :  gps7000.1234
+
+Crear servicio de linux:
+
+cd /etc/rc.d/init.d
+nano glassfish
+
+#Script to start/stop/restart Glassfish
+
+#chkconfig: 35 20 80
+
+#description: Glassfish v3 Daemon
+
+case "$1" in
+
+start)
+
+/u01/platform/glassfishv3/glassfish/bin/asadmin start-domain domain1
+
+;;
+
+stop)
+
+/u01/platform/glassfishv3/glassfish/bin/asadmin stop-domain domain1
+
+;;
+
+restart)
+
+/u01/platform/glassfishv3/glassfish/bin/asadmin stop-domain domain1
+
+/u01/platform/glassfishv3/glassfish/bin/asadmin start-domain domain1
+
+;;
+
+*)
+
+echo $"Usage: $0 {start|stop|restart}"
+
+exit 1
+
+esac  
+
+Guardar Archivo, Salir
+
+chmod +x glassfish
+
+chkconfig --add glassfish
+chkconfig --level 35 glassfish on
+
+service glassfish start
+service glassfish stop
+service glassfish restart
