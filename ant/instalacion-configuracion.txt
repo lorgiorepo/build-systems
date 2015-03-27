@@ -1,0 +1,23 @@
+### depende de la instalaci�n de java
+
+### se toma como supesto que ha sido copiado el archivo necesario a la carpeta /u01/install
+### apache-ant-1.8.4.zip
+
+cd /u01/install
+
+unzip apache-ant-1.8.4.zip
+
+mv apache-ant-1.8.4 /opt
+
+nano /etc/profile
+
+################################
+
+export ANT_HOME=/opt/apache-ant-1.8.4
+export PATH=$PATH:$ANT_HOME/bin
+
+################################
+
+source /etc/profile
+
+ant -version
