@@ -1,0 +1,36 @@
+### se toma como supesto que ha sido copiado el archivo necesario a la carpeta /u01/install
+### jdk-6u32-linux-x64.bin
+
+cd /u01/install
+
+chmod +x jdk-6u32-linux-x64.bin
+
+./jdk-6u32-linux-x64.bin
+
+mkdir /u01/java
+
+mv jdk1.6.0_32 /u01/java/
+
+### Configurar JVM por defecto
+
+update-alternatives --install /usr/bin/java java /u01/java/jdk1.6.0_32/bin/java 100
+
+update-alternatives --config java
+
+### Probar la versi�n de java
+
+java -version
+
+### Agregar configuraci�n de java como variables de entorno
+
+nano /etc/profile
+
+############################################
+
+export JAVA_HOME=/u01/java/jdk1.6.0_32
+export PATH=$PATH:$JAVA_HOME/bin
+export CLASSPATH=.:$JAVA_HOME/src.zip
+
+############################################
+
+source /etc/profile
